@@ -1,0 +1,245 @@
+﻿@model Inventory_Order_Managemen.Models.ApplicationUser
+@inject Inventory_Order_Managemen.Data.ApplicationDbContext Context
+@{UserProfile profile = Context.UserProfile.SingleOrDefault(x => x.ApplicationUserId.Equals(Model.Id));}
+
+
+<div class="left_col scroll-view">
+    <div class="navbar nav_title" style="border: 0;">
+        <a asp-area="" asp-controller="Dashboard" asp-action="Index" class="site_title"><i class="fa fa-pie-chart"></i> <span>Inventory!</span></a>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <!-- menu profile quick info -->
+    <div class="profile clearfix">
+        <div class="profile_pic">
+            <img src="@profile.ProfilePicture" alt="..." class="img-circle profile_img">
+        </div>
+        <div class="profile_info">
+            <span>Welcome,</span>
+            <h2>@profile.FirstName @profile.LastName</h2>
+            <a asp-area="" asp-controller="UserRole" asp-action="UserProfile"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+    </div>
+    <!-- /menu profile quick info -->
+
+    <br />
+
+    <!-- sidebar menu -->
+    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+        <div class="menu_section">
+            <h3>General</h3>
+            <ul class="nav side-menu">
+                <li>
+                    <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li class="@Html.IsSelected(controller: MainMenu.Dashboard.ControllerName)">
+                            <a href="@MainMenu.Dashboard.Path">
+                                <i class="fa fa-pie-chart"></i> <span>@MainMenu.Dashboard.PageName</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+
+                    <a><i class="fa fa-edit"></i> SALES <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li class="@Html.IsSelected(controller: MainMenu.CustomerType.ControllerName)">
+                            <a href="@MainMenu.CustomerType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.CustomerType.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.Customer.ControllerName)">
+                            <a href="@MainMenu.Customer.Path">
+                                <i class="fa fa-building-o"></i> <span>@MainMenu.Customer.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.SalesType.ControllerName)">
+                            <a href="@MainMenu.SalesType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.SalesType.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.SalesOrder.ControllerName)">
+                            <a href="@MainMenu.SalesOrder.Path">
+                                <i class="fa fa-certificate"></i> <span>@MainMenu.SalesOrder.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.Shipment.ControllerName)">
+                            <a href="@MainMenu.Shipment.Path">
+                                <i class="fa fa-truck"></i> <span>@MainMenu.Shipment.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.Invoice.ControllerName)">
+                            <a href="@MainMenu.Invoice.Path">
+                                <i class="fa fa-certificate"></i> <span>@MainMenu.Invoice.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.PaymentReceive.ControllerName)">
+                            <a href="@MainMenu.PaymentReceive.Path">
+                                <i class="fa fa-certificate"></i> <span>@MainMenu.PaymentReceive.PageName</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+                    <a><i class="fa fa-desktop"></i> PURCHASE <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li class="@Html.IsSelected(controller: MainMenu.VendorType.ControllerName)">
+                            <a href="@MainMenu.VendorType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.VendorType.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.Vendor.ControllerName)">
+                            <a href="@MainMenu.Vendor.Path">
+                                <i class="fa fa-building-o"></i> <span>@MainMenu.Vendor.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.PurchaseType.ControllerName)">
+                            <a href="@MainMenu.PurchaseType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.PurchaseType.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.PurchaseOrder.ControllerName)">
+                            <a href="@MainMenu.PurchaseOrder.Path">
+                                <i class="fa fa-certificate"></i> <span>@MainMenu.PurchaseOrder.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.GoodsReceivedNote.ControllerName)">
+                            <a href="@MainMenu.GoodsReceivedNote.Path">
+                                <i class="fa fa-certificate"></i> <span>@MainMenu.GoodsReceivedNote.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.Bill.ControllerName)">
+                            <a href="@MainMenu.Bill.Path">
+                                <i class="fa fa-certificate"></i> <span>@MainMenu.Bill.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.PaymentVoucher.ControllerName)">
+                            <a href="@MainMenu.PaymentVoucher.Path">
+                                <i class="fa fa-certificate"></i> <span>@MainMenu.PaymentVoucher.PageName</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a><i class="fa fa-table"></i> INVENTORY <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li class="@Html.IsSelected(controller: MainMenu.Product.ControllerName)">
+                            <a href="@MainMenu.Product.Path">
+                                <i class="fa fa-tag"></i> <span>@MainMenu.Product.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.ProductType.ControllerName)">
+                            <a href="@MainMenu.ProductType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.ProductType.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.UnitOfMeasure.ControllerName)">
+                            <a href="@MainMenu.UnitOfMeasure.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.UnitOfMeasure.PageName</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a><i class="fa fa-bar-chart-o"></i> CONFIG <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li class="@Html.IsSelected(controller: MainMenu.Currency.ControllerName)">
+                            <a href="@MainMenu.Currency.Path">
+                                <i class="fa fa-dollar"></i> <span>@MainMenu.Currency.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.Branch.ControllerName)">
+                            <a href="@MainMenu.Branch.Path">
+                                <i class="fa fa-building"></i> <span>@MainMenu.Branch.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.Warehouse.ControllerName)">
+                            <a href="@MainMenu.Warehouse.Path">
+                                <i class="fa fa-cubes"></i> <span>@MainMenu.Warehouse.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.CashBank.ControllerName)">
+                            <a href="@MainMenu.CashBank.Path">
+                                <i class="fa fa-money"></i> <span>@MainMenu.CashBank.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.PaymentType.ControllerName)">
+                            <a href="@MainMenu.PaymentType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.PaymentType.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.ShipmentType.ControllerName)">
+                            <a href="@MainMenu.ShipmentType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.ShipmentType.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.InvoiceType.ControllerName)">
+                            <a href="@MainMenu.InvoiceType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.InvoiceType.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.BillType.ControllerName)">
+                            <a href="@MainMenu.BillType.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.BillType.PageName</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+              
+            </ul>
+        </div>
+        <div class="menu_section">
+            <h3>Live On</h3>
+            <ul class="nav side-menu">
+                <li>
+                    <a><i class="fa fa-windows"></i> USER & ROLE <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li class="@Html.IsSelected(controller: MainMenu.User.ControllerName, action: MainMenu.User.ActionName)">
+                            <a href="@MainMenu.User.Path">
+                                <i class="fa fa-users"></i> <span>@MainMenu.User.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.ChangePassword.ControllerName, action: MainMenu.ChangePassword.ActionName)">
+                            <a href="@MainMenu.ChangePassword.Path">
+                                <i class="fa fa-key"></i> <span>@MainMenu.ChangePassword.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.Role.ControllerName, action: MainMenu.Role.ActionName)">
+                            <a href="@MainMenu.Role.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.Role.PageName</span>
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: MainMenu.ChangeRole.ControllerName, action: MainMenu.ChangeRole.ActionName)">
+                            <a href="@MainMenu.ChangeRole.Path">
+                                <i class="fa fa-gear"></i> <span>@MainMenu.ChangeRole.PageName</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+               
+                <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
+            </ul>
+        </div>
+
+    </div>
+    <!-- /sidebar menu -->
+    <!-- /menu footer buttons -->
+    <div class="sidebar-footer hidden-small">
+        <a data-toggle="tooltip" data-placement="top" title="Settings">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="Lock">
+            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+        </a>
+    </div>
+    <!-- /menu footer buttons -->
+</div>

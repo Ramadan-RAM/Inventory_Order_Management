@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewData["Title"] = "Users";
+}
+
+<section>
+    <div class="col-md">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="fa fa-building-o">  @ViewData["Title"]</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="Grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.box -->
+</section>
+
+<script id="templateForm" type="text/template">
+   
+    <table cellspacing="10">
+        <tr>
+            <td>
+                Email
+            </td>
+            <td colspan="3">
+                <input id="Email" name="Email" value="{{:Email}}" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                First Name
+            </td>
+            <td>
+                <input id="FirstName" name="FirstName" value="{{:FirstName}}" />
+            </td>
+            <td>
+                Last Name
+            </td>
+            <td>
+                <input id="LastName" name="LastName" value="{{:LastName}}" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Password
+            </td>
+            <td>
+                <input id="Password" name="Password" value="{{:Password}}" />
+            </td>
+            <td>
+                Re-type Password
+            </td>
+            <td>
+                <input id="ConfirmPassword" name="ConfirmPassword" value="{{:ConfirmPassword}}" />
+            </td>
+        </tr>
+    </table>
+</script>
+<script id="templateEditForm" type="text/template">
+    <input hidden id="UserProfileId" name="UserProfileId" value="{{:UserProfileId}}" />
+    <input hidden id="ApplicationUserId" name="ApplicationUserId" value="{{:ApplicationUserId}}" />
+    <table cellspacing="10">
+        <tr>
+            <td>
+                Email
+            </td>
+            <td colspan="3">
+                <input id="Email" name="Email" value="{{:Email}}" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                First Name
+            </td>
+            <td>
+                <input id="FirstName" name="FirstName" value="{{:FirstName}}" />
+            </td>
+            <td>
+                Last Name
+            </td>
+            <td>
+                <input id="LastName" name="LastName" value="{{:LastName}}" />
+            </td>
+        </tr>
+    </table>
+</script>
+
+@section Styles{
+
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(function () {
+
+            var dataManager = ej.DataManager({
+                url: "/api/User",
+                adaptor: new ej.WebApiAdaptor(),
+                offline: true
+            });
+
+            dataManager.ready.done(function (e) {
+                $("#Grid").ejGrid({
+                    dataSource: ej.DataManager({
+                        json: e.result,
+                        adaptor: new ej.remoteSaveAdaptor(),
+                        insertUrl: "/api/User/Insert",
+                        removeUrl: "/api/User/Remove",
+                        updateUrl: "/api/User/Update"
+                    }),
+                    toolbarSettings: {
+                        showToolbar: true,
+                        toolbarItems: ["add", "edit", "delete", "update", "cancel", "search", "printGrid"]
+                    },
+                    editSettings: {
+                        allowEditing: true,
+                        allowAdding: true,
+                        allowDeleting: true,
+                        showDeleteConfirmDialog: true,
+                        editMode: "dialogtemplate",
+                        dialogEditorTemplateID: "#templateForm",
+                    },
+                    isResponsive: true,
+                    enableResponsiveRow: true,
+                    allowSorting: true,
+                    allowSearching: true,
+                    allowFiltering: true,
+                    filterSettings: {
+                        filterType: "excel",
+                        maxFilterChoices: 100,
+                        enableCaseSensitivity: false
+                    },
+                    allowPaging: true,
+                    pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
+                    columns: [
+                        { field: "UserProfileId", headerText: 'Id', isPrimaryKey: true, isIdentity: true, visible: false },
+                        { field: "Email", headerText: 'Email', validationRules: { required: true } },
+                        { field: "FirstName", headerText: 'First Name', validationRules: { required: true } },
+                        { field: "LastName", headerText: 'Last Name', validationRules: { required: false } },
+                    ],
+                    actionComplete: "complete",
+                    actionBegin: "begin",
+                });
+            });
+
+
+
+        });
+
+        function begin(args) {
+
+            if (args.requestType == "add") {
+                $("#Grid").ejGrid("option", { "editSettings": { dialogEditorTemplateID: "#templateForm" } });
+            }
+            else if (args.requestType == "beginedit") {
+                $("#Grid").ejGrid("option", { "editSettings": { dialogEditorTemplateID: "#templateEditForm" } });                
+            }
+        }
+
+        function complete(args) {
+
+            $("#Email").ejMaskEdit({
+                inputMode: 'Text',
+            });
+            $("#FirstName").ejMaskEdit({
+                inputMode: 'Text',
+            });
+            $("#LastName").ejMaskEdit({
+                inputMode: 'Text',
+            });
+            $("#Password").ejMaskEdit({
+                inputMode: 'Password',
+                validationRules: { required: true },
+            });
+            $("#ConfirmPassword").ejMaskEdit({
+                inputMode: 'Password',
+                validationRules: { required: true },
+            });
+
+            if (args.requestType == 'beginedit') {
+                $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Record" });
+                $("#Email").ejMaskEdit("disable");
+            }
+
+            if (args.requestType == "save") {
+                this.refreshContent();
+            }
+            
+        }
+
+
+    </script>
+}

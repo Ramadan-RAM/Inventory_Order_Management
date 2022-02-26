@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewData["Title"] = "Goods Received Note";
+}
+
+<section>
+    <div class="col-md">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="fa fa-building-o">  @ViewData["Title"]</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="Grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.box -->
+</section>
+
+
+
+@section Styles{
+
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(function () {
+
+            var dataManager = ej.DataManager({
+                url: "/api/GoodsReceivedNote",
+                adaptor: new ej.WebApiAdaptor(),
+                offline: true
+            });
+
+            var dataManagerWarehouse = ej.DataManager({
+                url: "/api/Warehouse",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            var dataManagerPurchaseOrder = ej.DataManager({
+                url: "/api/PurchaseOrder",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            dataManager.ready.done(function (e) { 
+                $("#Grid").ejGrid({
+                    dataSource: ej.DataManager({
+                        json: e.result,
+                        adaptor: new ej.remoteSaveAdaptor(),
+                        insertUrl: "/api/GoodsReceivedNote/Insert",
+                        updateUrl: "/api/GoodsReceivedNote/Update",
+                        removeUrl: "/api/GoodsReceivedNote/Remove",
+                    }),
+                    toolbarSettings: {
+                        showToolbar: true,
+                        toolbarItems: ["add", "edit", "delete", "update", "cancel", "search", "printGrid"]
+                    },
+                    editSettings: {
+                        allowEditing: true,
+                        allowAdding: true,
+                        allowDeleting: true,
+                        showDeleteConfirmDialog: true,
+                        editMode: "dialog"
+                    },
+                    isResponsive: true,
+                    enableResponsiveRow: true,
+                    allowSorting: true,
+                    allowSearching: true,
+                    allowFiltering: true,
+                    filterSettings: {
+                        filterType: "excel",
+                        maxFilterChoices: 100,
+                        enableCaseSensitivity: false
+                    },
+                    allowPaging: true,
+                    pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
+                    columns: [
+                        { field: "GoodsReceivedNoteId", headerText: 'GRN', isPrimaryKey: true, isIdentity: true, visible: false },
+                        { field: "GoodsReceivedNoteName", headerText: 'GRN#', allowEditing: false },
+                        { field: "IsFullReceive", headerText: 'Full Receive', allowEditing: false, type: "boolean", editType: "booleanedit", defaultValue: true },
+                        { field: "PurchaseOrderId", headerText: 'PO#', foreignKeyField: "PurchaseOrderId", foreignKeyValue: "PurchaseOrderName", dataSource: dataManagerPurchaseOrder, validationRules: { required: true } },
+                        { field: "GRNDate", headerText: 'Receiving Date', editType: "datepicker", format: "{0:MM/dd/yyyy}", validationRules: { required: true } },
+                        { field: "VendorDONumber", headerText: 'Vendor DO#', validationRules: { required: true } },
+                        { field: "VendorInvoiceNumber", headerText: 'Vendor Invoice#', },
+                        { field: "WarehouseId", headerText: 'Warehouse', foreignKeyField: "WarehouseId", foreignKeyValue: "WarehouseName", dataSource: dataManagerWarehouse, validationRules: { required: true } },
+                    ],
+                    actionComplete: "complete",
+                });
+            });
+
+            
+        });
+
+        function complete(args) {
+            if (args.requestType == 'beginedit') {
+                $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Record" });
+            }
+
+            if (args.requestType == 'beginedit' || args.requestType == 'add') {
+                var selected = $('#GridPurchaseOrderId').data('ejDropDownList');
+                var selectedValue = parseInt(selected.option('value'));
+                var selectedText = selected.option('text');
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/PurchaseOrder/GetNotReceivedYet',
+                    success: function (data) {
+                        if (args.requestType == 'beginedit') {
+                            data.push({ 'PurchaseOrderId': selectedValue, 'PurchaseOrderName': selectedText });
+                        }
+
+                        $("#GridPurchaseOrderId").ejDropDownList({
+                            dataSource: data,
+                            fields: { id: 'PurchaseOrderId', text: 'PurchaseOrderName', value: 'PurchaseOrderId' },
+                            value: selectedValue
+                        });
+                    }
+                });
+
+            }
+
+        }
+
+
+    </script>
+}
+

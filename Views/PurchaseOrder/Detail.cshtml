@@ -1,0 +1,286 @@
+﻿@model Inventory_Order_Managemen.Models.PurchaseOrder
+
+@{ ViewData["Title"] = "Purchase Order Details"; }
+
+<section>
+    <div class="col-md">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="fa fa-building-o">  @ViewData["Title"] </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="Grid"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <section>
+        <div class="col-md">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2 class="fa fa-building-o">  @ViewData["Title"] </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.PurchaseOrderId):</label>
+                                <label class="control-label">@Html.DisplayFor(model => model.PurchaseOrderId)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.PurchaseOrderName):</label>
+                                <label>@Html.DisplayFor(model => model.PurchaseOrderName)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.OrderDate):</label>
+                                <label>@Html.DisplayFor(model => model.OrderDate)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.DeliveryDate):</label>
+                                <label>@Html.DisplayFor(model => model.DeliveryDate)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.BranchId):</label>
+                                <input type="text" id="BranchId" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.VendorId):</label>
+                                <input type="text" id="VendorId" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.CurrencyId):</label>
+                                <input type="text" id="CurrencyId" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.PurchaseTypeId):</label>
+                                <input type="text" id="PurchaseTypeId" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.Remarks):</label>
+                                <label class="control-label">@Html.DisplayFor(model => model.Remarks)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.Amount):</label>
+                                <label id="Amount" name="Amount">@Model.Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.Discount):</label>
+                                <label id="Discount" name="Discount">@Model.Discount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.SubTotal):</label>
+                                <label id="SubTotal" name="SubTotal">@Model.SubTotal</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.Tax):</label>
+                                <label id="Tax" name="Tax">@Model.Tax</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.Freight):</label>
+                                <label id="Freight" name="Freight">@Model.Freight</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">@Html.DisplayNameFor(model => model.Total):</label>
+                                <label id="Total" name="Total">@Model.Total</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    @section Styles{}
+
+    @section Scripts{
+
+        <script type="text/javascript">
+        $(function () {
+
+            var dataManager = ej.DataManager({
+                url: "/api/PurchaseOrderLine",
+                adaptor: new ej.WebApiAdaptor(),
+                headers: [{ "PurchaseOrderId": @Model.PurchaseOrderId}],
+                offline: true,
+            });
+
+            var dataManagerProduct = ej.DataManager({
+                url: "/api/Product",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            var dataManagerPurchaseOrder = ej.DataManager({
+                url: "/api/PurchaseOrder",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            var dataManagerBranch = ej.DataManager({
+                url: "/api/Branch",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            var dataManagerVendor = ej.DataManager({
+                url: "/api/Vendor",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            var dataManagerCurrency = ej.DataManager({
+                url: "/api/Currency",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            var dataManagerPurchaseType = ej.DataManager({
+                url: "/api/PurchaseType",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            $('#BranchId').ejDropDownList({
+                dataSource: dataManagerBranch,
+                fields: { id: 'BranchId', text: 'BranchName', value: 'BranchId' },
+                value: @Model.BranchId,
+                enabled: false,
+            });
+
+            $('#VendorId').ejDropDownList({
+                dataSource: dataManagerVendor,
+                fields: { id: 'VendorId', text: 'VendorName', value: 'VendorId' },
+                value: @Model.VendorId,
+                enabled: false,
+            });
+
+            $('#CurrencyId').ejDropDownList({
+                dataSource: dataManagerCurrency,
+                 fields: { id: 'CurrencyId', text: 'CurrencyName', value: 'CurrencyId' },
+                value: @Model.CurrencyId,
+                enabled: false,
+            });
+
+            $('#PurchaseTypeId').ejDropDownList({
+                dataSource: dataManagerPurchaseType,
+                fields: { id: 'PurchaseTypeId', text: 'PurchaseTypeName', value: 'PurchaseTypeId' },
+                value: @Model.PurchaseTypeId,
+                enabled: false,
+            });
+
+            dataManager.ready.done(function (e) {
+            $("#Grid").ejGrid({
+                dataSource: ej.DataManager({
+                    json: e.result,
+                    adaptor: new ej.remoteSaveAdaptor(),
+                    insertUrl: "/api/PurchaseOrderLine/Insert",
+                    updateUrl: "/api/PurchaseOrderLine/Update",
+                    removeUrl: "/api/PurchaseOrderLine/Remove",
+                }),
+                toolbarSettings: {
+                    showToolbar: true,
+                    toolbarItems: ["add", "edit", "delete", "update", "cancel", "printGrid"]
+                },
+                editSettings: {
+                    allowEditing: true,
+                    allowAdding: true,
+                    allowDeleting: true,
+                    showDeleteConfirmDialog: true,
+
+                },
+                allowPaging: true,
+                pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
+                columns: [
+                    { field: "PurchaseOrderLineId", headerText: 'Line Id', isPrimaryKey: true, isIdentity: true, visible: false },
+                    { field: "PurchaseOrderId", headerText: 'PO#', defaultValue: @Model.PurchaseOrderId, foreignKeyField: "PurchaseOrderId", foreignKeyValue: "PurchaseOrderName", dataSource: dataManagerPurchaseOrder, visible: false },
+                    { field: "ProductId", headerText: 'Product', foreignKeyField: "ProductId", foreignKeyValue: "ProductName", dataSource: dataManagerProduct },
+                    { field: "Description", headerText: 'Description' },
+                    { field: "Quantity", headerText: 'Qty', defaultValue: 1, editType: "numericedit", format: "{0:n2}" },
+                    { field: "Price", headerText: 'Price', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
+                    { field: "Amount", headerText: 'Amount', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
+                    { field: "DiscountPercentage", headerText: 'Disc %', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
+                    { field: "DiscountAmount", headerText: 'Disc Amt', defaultValue: 0, visible: false, editType: "numericedit", format: "{0:n2}" },
+                    { field: "SubTotal", headerText: 'SubTotal', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
+                    { field: "TaxPercentage", headerText: 'Tax %', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
+                    { field: "TaxAmount", headerText: 'Tax Amt', defaultValue: 0, visible: false, editType: "numericedit", format: "{0:n2}" },
+                    { field: "Total", headerText: 'Total', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
+                ],
+                actionComplete: "complete",
+            });
+            });
+
+
+        });
+
+        function complete(args) {
+
+            if (args.requestType == 'beginedit') {
+                $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Record" });
+            }
+            if (args.requestType == 'save' || args.requestType == 'delete') {
+                RewriteTotal(args.data.PurchaseOrderId);
+            }
+        }
+
+        function RewriteTotal(purchaseOrderId) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/PurchaseOrder/GetById/' + purchaseOrderId,
+                success: function (data) {
+                    $('#Amount').text(data.Amount);
+                    $('#SubTotal').text(data.SubTotal);
+                    $('#Discount').text(data.Discount);
+                    $('#Tax').text(data.Tax);
+                    $('#Freight').text(data.Freight);
+                    $('#Total').text(data.Total);
+                }
+            });
+        }
+
+        </script>
+    }
+
